@@ -25,6 +25,8 @@ _create_template () {
 
         randomStringOld=${randomStringNew}
     done
+
+    mkdir ./nodes/nodes_1/accounts
 }
 
 # create right file content

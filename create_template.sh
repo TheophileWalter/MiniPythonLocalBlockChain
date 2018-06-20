@@ -4,6 +4,9 @@
 # if so, it's removed
 [ -d nodes ] && rm -rf nodes
 
+randomStringOld=""
+randomStringNew=""
+
 # create template architecture
 _create_template () {
     
@@ -11,7 +14,19 @@ _create_template () {
         mkdir -p nodes/nodes_${i}/${1}s/
         
         for j in {1..4}; do
-            touch nodes/nodes_${i}/${1}s/${1}_${j}
+            randomStringNew=$(openssl rand -hex 8)
+            [ -z ${randomStringOld} ] && randomStringOld=${randomStringNew}
+
+            filePath=nodes/nodes_${i}/${1}s/${j}.${randomStringNew}
+            
+            echo "previous ${j}.${randomStringOld}"     >> ${filePath}
+            echo "miner mbc-blockchains-master-1-isd"   >> ${filePath}
+            echo "pow 16"                               >> ${filePath}
+            echo "date Mon-Jun-18--07:33:57--+00-2018"  >> ${filePath}
+            echo "nonce 19984"                          >> ${filePath}
+            echo "transactions"                         >> ${filePath}
+
+            randomStringOld=${randomStringNew}
         done
     done
 }

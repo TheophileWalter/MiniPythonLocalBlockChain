@@ -60,7 +60,7 @@ if __name__ == '__main__':
     newAccount1 = Accounts('node_1')
     account11 = newAccount1.create_account(500)
 
-    """print(open('./nodes/nodes_1/').read())
+    """print(open('./nodes/node_1/').read())
     print(account11)
     newAccount1.modify_account(account11, 400)
     

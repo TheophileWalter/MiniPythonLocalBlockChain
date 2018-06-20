@@ -8,10 +8,10 @@
 _create_template () {
     
     for i in {1..4}; do
-        mkdir -p /nodes/nodes_${i}/${1}s/
+        mkdir -p nodes/nodes_${i}/${1}s/
         
         for j in {1..4}; do
-            touch /nodes/nodes_${i}/${1}s/${1}_${j}
+            touch nodes/nodes_${i}/${1}s/${1}_${j}
         done
     done
 }

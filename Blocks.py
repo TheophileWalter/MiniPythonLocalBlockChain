@@ -48,6 +48,10 @@ class Blocks:
         prog = re.compile(r"^\d+\.[\da-f]{1,64}$")
         return [f for f in listdir(self.path) if isfile(join(self.path, f)) and prog.match(f)]
 
+    # Ecriture d'un bloc
+    def writeBlock(self, previous, miner, pow, date, nonce, transactions):
+        
+
 
 # Test
 if __name__ == '__main__':

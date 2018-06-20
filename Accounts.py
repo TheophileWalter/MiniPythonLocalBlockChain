@@ -14,7 +14,6 @@ class Accounts:
     def __init__(self, nodeName):
         self.nodeName = nodeName
         self.nodePath = "nodes/"+nodeName+"/accounts"
-        self.accountsFilesList = []
 
     # Method : generate new hash
     # Params : self
@@ -25,9 +24,7 @@ class Accounts:
     # Method : get list of account nodes
     # Params : self
     def _get_accounts_list(self):
-        self.accountsFilesList = os.listdir("somedirectory")
-        #for p in self.accountsFilesList: print(p)
-        return filePath
+        return os.listdir(self.nodePath)
 
     # Method : modify account
     # Params : self, accountId, amount
@@ -69,3 +66,7 @@ if __name__ == '__main__':
     # test _check_if_account_already_exists
     print("File already exists : "+str(newAccount1._check_if_account_already_exists(account11))+" [=? True]")
     print("File already exists : "+str(newAccount1._check_if_account_already_exists("20374ca3ee149e19d5e0a024f7062836"))+" [=? False]")
+    # test _get_new_hash
+    print(newAccount1._get_new_hash()+" != "+newAccount1._get_new_hash())
+    #
+print("Accounts list : "+str(newAccount1._get_accounts_list()))

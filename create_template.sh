@@ -22,7 +22,7 @@ _create_template () {
             filePath=nodes/nodes_${i}/${fileName}s/${j}.${randomStringNew}
 
             # create file content
-            _create_content ${fileName} ${filePath} ${randomStringOld} ${randomStringNew}
+            _create_content ${fileName} ${filePath} ${randomStringOld} ${randomStringNew} ${j}
 
             randomStringOld=${randomStringNew}
         done
@@ -36,6 +36,7 @@ _create_content () {
     filePath=${2}
     randomStringOld=${3}
     randomStringNew=${4}
+    j=$((${5}-1))
 
     case "${fileName}" in
     block)

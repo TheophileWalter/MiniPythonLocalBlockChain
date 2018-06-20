@@ -48,14 +48,14 @@ _create_content () {
     transaction)
         echo "from ${j}.${randomStringOld}"         >> ${filePath}
         echo "to ${j}.${randomStringNew}"           >> ${filePath}
-        echo "amount $(echo $RANDOM)"         >> ${filePath}
-        echo "fees $(echo $RANDOM)"           >> ${filePath}
+        echo "amount $(echo $RANDOM) units"         >> ${filePath}
+        echo "fees $(echo $RANDOM) units"           >> ${filePath}
         ;;
     pendingTransaction)
         echo "from ${j}.${randomStringNew}"         >> ${filePath}
         echo "to ${j}.${randomStringOld}"           >> ${filePath}
-        echo "amount $(echo $RANDOM)"         >> ${filePath}
-        echo "fees $(echo $RANDOM)"           >> ${filePath}
+        echo "amount $(echo $RANDOM) units"         >> ${filePath}
+        echo "fees $(echo $RANDOM) units"           >> ${filePath}
         ;;
     *)
         echo ""                                     >> ${filePath}

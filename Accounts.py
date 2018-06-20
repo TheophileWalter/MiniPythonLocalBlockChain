@@ -12,7 +12,8 @@ class Accounts:
     # Method : init
     # Params : self, nodeName
     def __init__(self, nodeName):
-        self.nodePath = "./nodes/"+nodeName+"/accounts"
+        self.nodeName = nodeName
+        self.nodePath = "nodes/"+nodeName+"/accounts"
         self.accountsFilesList = []
 
     # Method : generate new hash
@@ -46,7 +47,8 @@ class Accounts:
     # Params : self, amount
     def create_account(self, amount):
         hashCreated = Accounts._get_new_hash(self)
-        fileName = self.nodePath+"/"+hashCreated
+        fileName = str(self.nodePath+"/"+hashCreated)
+        print(fileName)
         accountFileToModify = open(fileName, 'w')
         accountFileToModify.write(str(amount))
         accountFileToModify.close()
@@ -57,12 +59,13 @@ class Accounts:
 if __name__ == '__main__':
     newAccount1 = Accounts('node_1')
     account11 = newAccount1.create_account(500)
-    print(open('./nodes/nodes_1/').read())
+
+    """print(open('./nodes/nodes_1/').read())
     print(account11)
     newAccount1.modify_account(account11, 400)
     
 
     newAccount2 = Accounts('node_2')
     print(newAccount2._get_accounts_list())
-    newAccount2._check_if_account_already_exists
+    newAccount2._chec k_if_account_already_exists"""
     

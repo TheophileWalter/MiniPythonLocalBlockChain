@@ -18,7 +18,7 @@ _create_template () {
         randomStringNew=$(openssl rand -hex 8)
         [ -z ${randomStringOld} ] && randomStringOld=${randomStringNew}
 
-        filePath=nodes/nodes_1/${fileName}s/${j}.${randomStringNew}
+        filePath=nodes/node_1/${fileName}s/${j}.${randomStringNew}
 
         # create file content
         _create_content ${fileName} ${filePath} ${randomStringOld} ${randomStringNew} ${j}
@@ -74,9 +74,9 @@ _main () {
     _create_template transaction
     _create_template pendingTransaction
 
-    cp -R ./nodes/nodes_1 ./nodes/nodes_2
-    cp -R ./nodes/nodes_1 ./nodes/nodes_3
-    cp -R ./nodes/nodes_1 ./nodes/nodes_4
+    cp -R ./nodes/node_1 ./nodes/node_2
+    cp -R ./nodes/node_1 ./nodes/node_3
+    cp -R ./nodes/node_1 ./nodes/node_4
 
 }
 

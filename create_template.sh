@@ -58,10 +58,6 @@ _create_content () {
         echo "amount $(echo $RANDOM) units"         >> ${filePath}
         echo "fees $(echo $RANDOM) units"           >> ${filePath}
         ;;
-    account)
-        echo "hash ${j}.${randomStringNew}"         >> ${filePath}
-        echo "amount $(echo $RANDOM)"               >> ${filePath}
-        ;;
     *)
         echo ""                                     >> ${filePath}
         ;;
@@ -76,7 +72,6 @@ _main () {
     _create_template block
     _create_template transaction
     _create_template pendingTransaction
-    _create_template account
 
 }
 

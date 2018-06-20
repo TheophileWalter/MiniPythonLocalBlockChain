@@ -45,7 +45,7 @@ _create_content () {
         echo "pow 16"                               >> ${filePath}
         echo "date Mon-Jun-18--07:33:57--+00-2018"  >> ${filePath}
         echo "nonce 19984"                          >> ${filePath}
-        echo "transactions"                         >> ${filePath}
+        echo "transactions "                        >> ${filePath}
         ;;
     transaction)
         echo "from ${j}.${randomStringOld}"         >> ${filePath}

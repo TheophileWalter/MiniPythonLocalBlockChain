@@ -7,13 +7,13 @@ import filecmp
 import hashlib
 import random
 
+
 class Accounts(object):
 
     # Method : init
-    # Params : self, uniqueID, amount
-    def __init__(self, uniqueID, amount):
-        self.uniqueID = uniqueID
-        self.amount = amount
+    # Params : self, nodeName
+    def __init__(self, nodeName):
+        self.nodePath = "./nodes/"+nodeName+"/"
         self.accountsFilesList = []
 
     # Method : generate new hash
@@ -24,40 +24,31 @@ class Accounts(object):
 
     # Method : append a new account in account.txt
     # Params : self
-    def _create_account(self):
-        for accountFilePath in self.accountsList:
-            accountFile = open(accountFilePath, 'w+')
-            accountFile.write(str(self.uniqueID)+":"+str(self.amount))
+    def _create_account(self, uniqueId, amount):
+        accountFilePath = self.nodePath+_get_new_hash(self)
+        accountFile = open(accountFilePath, 'w+')
+        accountFile.write(str(uniqueID)+":"+str(amount))
+        accountFile.close()
     
     # Method : get list of account nodes
     # Params : self
     def _get_accounts_list(self):
-        for root, dirs, files in os.walk("."):
-            for fileName in files:
-                filePath = os.path.join(root, fileName)
-                
-                if re.search("(\.\/nodes\/nodes_[0-9]+\/accounts\/.*)", filePath):
-                    self.accountsFilesList.append(filePath)
-
+        self.accountsFilesList = os.listdir("somedirectory")
         #for p in self.accountsFilesList: print(p)
         return filePath
 
-    # Method : check if all accounts.txt are identicals
-    # Params : self
-    def _check_all_accounts(self):
+    # Method : modify account
+    # Params : self, accountId
+    def _modify_account(self, accountId, amount):
+        accountFileToModify = open(accountId, 'w')
+        accountFileToModify.write(str(amount))
+        accountFileToModify.close()
 
-        visitedAccountsFiles=[]
-
-        for file1 in self.accountsFilesList:
-            
-            visitedAccountsFiles.append(file1)
-
-            for file2 in self.accountsFilesList:
-                if file2 in visitedAccountsFiles:
-                    if not filecmp.cmp('file1.txt', 'file1.txt'):
-                        return False
-        
-        return True
+    # Method : check if account already exists
+    # Params : self, accountId
+    def _modify_account(self, accountId):
+        fileName = self.nodePath+"/"+accountId
+        return os.path.isfile(fileName)
 
 
 # TESTS

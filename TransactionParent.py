@@ -53,12 +53,6 @@ class TransactionParent:
 
         return d
 
-    """hashCreated = _get_new_hash(self)
-        fileName = self.nodePath+"/"+hashCreated
-        accountFileToModify = open(fileName, 'w')
-        accountFileToModify.write(str(amount))
-        accountFileToModify.close()
-        return hashCreated"""
     """
     Ecrit une nouvelle transaction dans un fichier
     """

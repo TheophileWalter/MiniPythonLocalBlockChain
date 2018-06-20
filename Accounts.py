@@ -53,6 +53,16 @@ class Accounts:
         accountFileToModify.close()
         return hashCreated
     
+    # Method : read account
+    # Params : self, accountId
+    def get_account_amount(self, accountId):
+        fileName = self.nodePath+"/"+accountId
+        mustExists = Accounts._check_if_account_already_exists(self, accountId)
+
+        if mustExists:
+            with open(fileName, 'r') as f:
+                print(f.read())
+                return f.read()
 
 # TESTS
 if __name__ == '__main__':
@@ -68,5 +78,7 @@ if __name__ == '__main__':
     print("File already exists : "+str(newAccount1._check_if_account_already_exists("20374ca3ee149e19d5e0a024f7062836"))+" [=? False]")
     # test _get_new_hash
     print(newAccount1._get_new_hash()+" != "+newAccount1._get_new_hash())
+    # test accounts list
+    print("Accounts list : "+str(newAccount1._get_accounts_list()))
     #
-print("Accounts list : "+str(newAccount1._get_accounts_list()))
+    newAccount1.get_account_amount(account11)

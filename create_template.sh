@@ -25,8 +25,6 @@ _create_template () {
 
         randomStringOld=${randomStringNew}
     done
-
-    mkdir ./nodes/node_1/accounts
 }
 
 # create right file content
@@ -73,6 +71,8 @@ _main () {
     _create_template block
     _create_template transaction
     _create_template pendingTransaction
+
+    mkdir ./nodes/node_1/accounts
 
     cp -R ./nodes/node_1 ./nodes/node_2
     cp -R ./nodes/node_1 ./nodes/node_3

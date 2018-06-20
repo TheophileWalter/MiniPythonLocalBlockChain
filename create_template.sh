@@ -12,20 +12,18 @@ _create_template () {
 
     fileName=${1}
     
-    for i in {1..4}; do
-        mkdir -p nodes/nodes_${i}/${fileName}s/
-        
-        for j in {1..4}; do
-            randomStringNew=$(openssl rand -hex 8)
-            [ -z ${randomStringOld} ] && randomStringOld=${randomStringNew}
+    mkdir -p nodes/nodes_1/${fileName}s/
+    
+    for j in {1..4}; do
+        randomStringNew=$(openssl rand -hex 8)
+        [ -z ${randomStringOld} ] && randomStringOld=${randomStringNew}
 
-            filePath=nodes/nodes_${i}/${fileName}s/${j}.${randomStringNew}
+        filePath=nodes/nodes_1/${fileName}s/${j}.${randomStringNew}
 
-            # create file content
-            _create_content ${fileName} ${filePath} ${randomStringOld} ${randomStringNew} ${j}
+        # create file content
+        _create_content ${fileName} ${filePath} ${randomStringOld} ${randomStringNew} ${j}
 
-            randomStringOld=${randomStringNew}
-        done
+        randomStringOld=${randomStringNew}
     done
 }
 
@@ -73,6 +71,10 @@ _main () {
     _create_template block
     _create_template transaction
     _create_template pendingTransaction
+
+    cp -R ./nodes/nodes_1 ./nodes/nodes_2
+    cp -R ./nodes/nodes_1 ./nodes/nodes_3
+    cp -R ./nodes/nodes_1 ./nodes/nodes_4
 
 }
 

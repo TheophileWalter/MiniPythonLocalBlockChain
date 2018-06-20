@@ -43,19 +43,19 @@ _create_content () {
         echo "pow 16"                               >> ${filePath}
         echo "date Mon-Jun-18--07:33:57--+00-2018"  >> ${filePath}
         echo "nonce 19984"                          >> ${filePath}
-        echo "transactions"                         >> ${filePath}
+        echo "transactions "                        >> ${filePath}
         ;;
     transaction)
         echo "from ${j}.${randomStringOld}"         >> ${filePath}
         echo "to ${j}.${randomStringNew}"           >> ${filePath}
-        echo "amount ($echo $RANDOM) units"         >> ${filePath}
-        echo "fees $(echo $RANDOM) units"           >> ${filePath}
+        echo "amount $(echo $RANDOM)"         >> ${filePath}
+        echo "fees $(echo $RANDOM)"           >> ${filePath}
         ;;
     pendingTransaction)
         echo "from ${j}.${randomStringNew}"         >> ${filePath}
         echo "to ${j}.${randomStringOld}"           >> ${filePath}
-        echo "amount $(echo $RANDOM) units"         >> ${filePath}
-        echo "fees $(echo $RANDOM) units"           >> ${filePath}
+        echo "amount $(echo $RANDOM)"         >> ${filePath}
+        echo "fees $(echo $RANDOM)"           >> ${filePath}
         ;;
     *)
         echo ""                                     >> ${filePath}

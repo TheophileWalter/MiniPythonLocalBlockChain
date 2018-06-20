@@ -9,26 +9,65 @@ randomStringNew=""
 
 # create template architecture
 _create_template () {
+
+    fileName=${1}
     
     for i in {1..4}; do
-        mkdir -p nodes/nodes_${i}/${1}s/
+        mkdir -p nodes/nodes_${i}/${fileName}s/
         
         for j in {1..4}; do
             randomStringNew=$(openssl rand -hex 8)
             [ -z ${randomStringOld} ] && randomStringOld=${randomStringNew}
 
-            filePath=nodes/nodes_${i}/${1}s/${j}.${randomStringNew}
-            
-            echo "previous ${j}.${randomStringOld}"     >> ${filePath}
-            echo "miner mbc-blockchains-master-1-isd"   >> ${filePath}
-            echo "pow 16"                               >> ${filePath}
-            echo "date Mon-Jun-18--07:33:57--+00-2018"  >> ${filePath}
-            echo "nonce 19984"                          >> ${filePath}
-            echo "transactions"                         >> ${filePath}
+            filePath=nodes/nodes_${i}/${fileName}s/${j}.${randomStringNew}
+
+            # create file content
+            _create_content ${fileName} ${filePath} ${randomStringOld} ${randomStringNew}
 
             randomStringOld=${randomStringNew}
         done
     done
+}
+
+# create right file content
+_create_content () {
+
+    fileName=${1}
+    filePath=${2}
+    randomStringOld=${3}
+    randomStringNew=${4}
+
+    case "${fileName}" in
+    block)
+        echo "previous ${j}.${randomStringOld}"     >> ${filePath}
+        echo "miner mbc-blockchains-master-1-isd"   >> ${filePath}
+        echo "pow 16"                               >> ${filePath}
+        echo "date Mon-Jun-18--07:33:57--+00-2018"  >> ${filePath}
+        echo "nonce 19984"                          >> ${filePath}
+        echo "transactions"                         >> ${filePath}
+        ;;
+    transaction)
+        echo "from ${j}.${randomStringOld}"         >> ${filePath}
+        echo "to ${j}.${randomStringNew}"           >> ${filePath}
+        echo "amount ($echo $RANDOM) units"         >> ${filePath}
+        echo "fees $(echo $RANDOM) units"           >> ${filePath}
+        ;;
+    pendingTransaction)
+        echo "from ${j}.${randomStringNew}"         >> ${filePath}
+        echo "to ${j}.${randomStringOld}"           >> ${filePath}
+        echo "amount $(echo $RANDOM) units"         >> ${filePath}
+        echo "fees $(echo $RANDOM) units"           >> ${filePath}
+        ;;
+    account)
+        echo "hash ${j}.${randomStringNew}"         >> ${filePath}
+        echo "amount $(echo $RANDOM)"               >> ${filePath}
+        ;;
+    *)
+        echo ""                                     >> ${filePath}
+        ;;
+    esac
+
+    
 }
 
 # main function

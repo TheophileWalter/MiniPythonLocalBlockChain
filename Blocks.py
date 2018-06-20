@@ -4,6 +4,10 @@
     Gestion des blocs
 """
 
+from os import listdir
+from os.path import isfile, join
+import re
+
 class Blocks:
 
     # Constructeur de la classe
@@ -40,11 +44,14 @@ class Blocks:
 
     # Récupère la liste des blocs de la chaîne
     def getList(self):
-        return
+        # Liste les fichiers (avec vérification du format)
+        prog = re.compile(r"^\d+\.[\da-f]{1,64}$")
+        return [f for f in listdir(self.path) if isfile(join(self.path, f)) and prog.match(f)]
+
 
 # Test
 if __name__ == '__main__':
-    blocks = Blocks('nodes_2')
-    b = blocks.getBlock('1.82f3ca7aafda0f31')
-    print(b)
+    node = 'nodes_1'
+    blocks = Blocks(node)
+    print(blocks.getList())
 

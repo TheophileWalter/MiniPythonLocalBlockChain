@@ -12,7 +12,7 @@ _create_template () {
 
     fileName=${1}
     
-    mkdir -p nodes/nodes_1/${fileName}s/
+    mkdir -p nodes/node_1/${fileName}s/
     
     for j in {1..4}; do
         randomStringNew=$(openssl rand -hex 8)
@@ -26,7 +26,7 @@ _create_template () {
         randomStringOld=${randomStringNew}
     done
 
-    mkdir ./nodes/nodes_1/accounts
+    mkdir ./nodes/node_1/accounts
 }
 
 # create right file content

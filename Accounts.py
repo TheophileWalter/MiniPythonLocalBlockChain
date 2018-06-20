@@ -7,19 +7,19 @@ import hashlib
 import random
 
 
-class Accounts(object):
+class Accounts:
 
     # Method : init
     # Params : self, nodeName
     def __init__(self, nodeName):
-        self.nodePath = "./nodes/"+nodeName+"/"
+        self.nodePath = "./nodes/"+nodeName+"/accounts"
         self.accountsFilesList = []
 
     # Method : generate new hash
     # Params : self
     def _get_new_hash(self):
         intToHash = random.randint(0, 2**32-1)
-        return hashlib.md5(intToHash).hexdigest()
+        return hashlib.md5(str(intToHash).encode()).hexdigest()
     
     # Method : get list of account nodes
     # Params : self
@@ -44,8 +44,8 @@ class Accounts(object):
 
     # Method : create account
     # Params : self, amount
-    def create_account(self, accountId, amount):
-        hashCreated = _get_new_hash(self)
+    def create_account(self, amount):
+        hashCreated = Accounts._get_new_hash(self)
         fileName = self.nodePath+"/"+hashCreated
         accountFileToModify = open(fileName, 'w')
         accountFileToModify.write(str(amount))
@@ -57,8 +57,10 @@ class Accounts(object):
 if __name__ == '__main__':
     newAccount1 = Accounts('node_1')
     account11 = newAccount1.create_account(500)
+    print(open('./nodes/nodes_1/').read())
     print(account11)
     newAccount1.modify_account(account11, 400)
+    
 
     newAccount2 = Accounts('node_2')
     print(newAccount2._get_accounts_list())

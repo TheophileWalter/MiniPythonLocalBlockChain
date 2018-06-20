@@ -22,6 +22,7 @@ class Blocks:
         with open(self.path + id, 'r') as f:
             content = f.readlines()
             for line in content:
+                line = line.strip()
                 # Découpe en fonction des espaces
                 identifier = line.split(' ')
                 # Vérifie si la ligne est correcte
@@ -43,7 +44,7 @@ class Blocks:
 
 # Test
 if __name__ == '__main__':
-    blocks = Blocks('nodes_1')
-    b = blocks.getBlock('1.b9d946ccdd74dcae')
+    blocks = Blocks('nodes_2')
+    b = blocks.getBlock('1.82f3ca7aafda0f31')
     print(b)
 

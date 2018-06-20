@@ -20,22 +20,23 @@ class TransactionParent:
     def __init__(self, b, node):
 
         if b == True:
-            self.path = "/nodes/"+node+"/transactions"
+            self.path = "nodes/"+node+"/transactions"
         else:
-            self.path = "/nodes/"+node+"/pendingTransactions"
+            self.path = "nodes/"+node+"/pendingTransactions"
 
     """
     Retourne la liste des transactions
     """
-    def listTrans(path):
+    def listTrans(self, path):
         return os.listdir(path)
 
     """
     Retourne une transaction sous forme de dictionnaire
     """
-    def readTrans(trans):
+    def readTrans(self, trans):
         d = {}
-        with open(trans, 'r') as t:
+        path = self.path + "/" + trans
+        with open(path, 'r') as t:
             content = t.readlines()
 
             # remove whitespaces and \n
@@ -44,10 +45,21 @@ class TransactionParent:
             for line in content:
                 word = line.split(" ")
 
-                if word in ["from", "to", "amount", "fees"]:
+                if word[0] in ['from', 'to', 'amount', 'fees']:
                     d[word[0]] = word[1]
                 else:
                     return False
 
         return d
 
+    """
+    Ecrit une nouvelle transaction dans un fichier
+    """
+    def writeTrans(self, path):
+        return
+
+
+if __name__ == '__main__':
+    trans = TransactionParent(False, "nodes_1")
+    print(trans.listTrans(trans.path))
+    print(trans.readTrans('1.edb53223550477e2'))

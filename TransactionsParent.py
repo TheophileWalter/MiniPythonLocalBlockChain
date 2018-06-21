@@ -48,7 +48,7 @@ class TransactionsParent:
 
                 if word[0] in ['from', 'to', 'amount', 'fees']:
                     d[word[0]] = word[1]
-                else:
+                elif line != '':
                     return False
 
         return d

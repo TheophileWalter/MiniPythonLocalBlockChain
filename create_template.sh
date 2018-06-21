@@ -51,7 +51,7 @@ _create_content () {
         echo "amount $(echo $RANDOM) units"         >> ${filePath}
         echo "fees $(echo $RANDOM) units"           >> ${filePath}
         ;;
-    pendingTransaction)
+    pending-transaction)
         echo "from ${j}.${randomStringNew}"         >> ${filePath}
         echo "to ${j}.${randomStringOld}"           >> ${filePath}
         echo "amount $(echo $RANDOM) units"         >> ${filePath}

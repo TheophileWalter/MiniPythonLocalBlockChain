@@ -8,7 +8,7 @@ Classe TransactionssParent
 Ecrire et lire les transactions dans les fichiers Transactions et PendingTransactions
 """
 
-class TransactionssParent:
+class TransactionsParent:
     
     """ 
     Initialise le chemin jusqu'au dossier correspondant au type de transaction

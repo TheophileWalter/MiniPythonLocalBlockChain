@@ -33,3 +33,4 @@ Node = Miner
   - [x] _init_(self)
   - [x] get_date(self)
   - [x] tests
+- [ ] Class : **Node.py**

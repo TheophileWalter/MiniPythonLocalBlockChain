@@ -3,12 +3,12 @@ import hashlib as hl
 from os.path import isfile
 
 """
-Classe TransactionParent
+Classe TransactionssParent
 
 Ecrire et lire les transactions dans les fichiers Transactions et PendingTransactions
 """
 
-class TransactionParent:
+class TransactionssParent:
     
     """ 
     Initialise le chemin jusqu'au dossier correspondant au type de transaction
@@ -73,7 +73,7 @@ class TransactionParent:
 
 if __name__ == '__main__':
     # transaction
-    trans = TransactionParent(True, "node_1")
+    trans = TransactionsParent(True, "node_1")
     tr1 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '40000', '10')
     tr2 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
     tr3 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     print("Read "+str(tr2)+str(trans.readTrans(tr2)))
 
     # pending transaction
-    trans = TransactionParent(False, "node_3")
+    trans = TransactionsParent(False, "node_3")
     tr4 = trans.writeTrans('3.6764f46975c7de06', '3.5541f46975c7de06', '100', '1')
     print("tr4 = "+str(tr4)+" : OK")
     print("Trans list = "+str(trans.listTrans()))

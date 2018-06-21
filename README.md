@@ -7,9 +7,9 @@ Node = Miner
 ### TODO list
 - [ ] Class : **Main.py**
 - [ ] Class : **Blocks.py** _Théophile_
-- [ ] Class : **TransactionParent.py** (classe mère de Transactions et PendingTransactions) _Alice_
-- [ ] Class : **Transactions.py** (hérite de TransactionParent, définit uniquement le dossier où chercher)
-- [ ] Class : **PendingTransactions.py** (hérite de TransactionParent, définit uniquement le dossier où chercher)
+- [ ] Class : **TransactionsParent.py** (classe mère de Transactions et PendingTransactions, définit le dossier où chercher) _Alice_
+- [ ] Class : **Transactions.py** (hérite de TransactionsParent) _Alice_
+- [ ] Class : **PendingTransactions.py** (hérite de TransactionsParent, rajoute une méthode qui supprime une transaction) _Alice_
 - [ ] Class : **Accounts.py** _Alexis_
   - [x] _init__(self, nodeName)
   - [x] _get_new_hash(self)

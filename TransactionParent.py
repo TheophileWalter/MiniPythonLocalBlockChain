@@ -68,7 +68,7 @@ class TransactionParent:
             file.close()
             return nameFile
         else:
-            return -1
+            return False
 
 
 if __name__ == '__main__':
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     tr3 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
     print("tr1 = "+str(tr1)+" : OK")
     print("tr2 = "+str(tr2)+" : OK")
-    print("tr2 = "+str(tr3)+" : -1")
+    print("tr2 = "+str(tr3)+" : False")
     print("Trans list = "+str(trans.listTrans()))
     print("Read "+str(tr1)+str(trans.readTrans(tr1)))
     print("Read "+str(tr2)+str(trans.readTrans(tr2)))

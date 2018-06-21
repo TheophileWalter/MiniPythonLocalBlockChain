@@ -62,27 +62,32 @@ class TransactionParent:
         filePath = self.path + "/" + nameFile
 
         ## test si le fichier existe deja
-        if isfile(filePath):
+        if not isfile(filePath):
             file = open(filePath, 'w')
             file.write(chaine)
             file.close()
+            return nameFile
         else:
-            return False
-
-        return
+            return -1
 
 
 if __name__ == '__main__':
     # transaction
     trans = TransactionParent(True, "node_1")
-    trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '40000', '10')
-    trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
-    print(trans.listTrans())
-    print(trans.readTrans('f16d7429acd70873e9377290333f3334'))
+    tr1 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '40000', '10')
+    tr2 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
+    tr3 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
+    print("tr1 = "+str(tr1)+" : OK")
+    print("tr2 = "+str(tr2)+" : OK")
+    print("tr2 = "+str(tr3)+" : -1")
+    print("Trans list = "+str(trans.listTrans()))
+    print("Read "+str(tr1)+str(trans.readTrans(tr1)))
+    print("Read "+str(tr2)+str(trans.readTrans(tr2)))
 
     # pending transaction
     trans = TransactionParent(False, "node_3")
-    trans.writeTrans('3.6764f46975c7de06', '3.5541f46975c7de06', '100', '1')
-    print(trans.listTrans())
-    print(trans.readTrans('c997d20e015a6d378c7266d5cc504fa8'))
+    tr4 = trans.writeTrans('3.6764f46975c7de06', '3.5541f46975c7de06', '100', '1')
+    print("tr4 = "+str(tr4)+" : OK")
+    print("Trans list = "+str(trans.listTrans()))
+    print("Read "+str(tr4)+str(trans.readTrans(tr4)))
 

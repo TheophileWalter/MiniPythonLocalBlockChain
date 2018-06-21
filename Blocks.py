@@ -7,6 +7,7 @@
 from os import listdir
 from os.path import isfile, join
 import re
+import hashlib
 
 class Blocks:
 
@@ -37,7 +38,7 @@ class Blocks:
                     block[identifier[0]] = line[(len(identifier[0])+1):]
                 elif identifier[0] == 'transactions':
                     block[identifier[0]] = identifier[1:]
-                else:
+                elif line != '':
                     return False
             f.close()
         return block
@@ -48,10 +49,31 @@ class Blocks:
         prog = re.compile(r"^\d+\.[\da-f]{1,64}$")
         return [f for f in listdir(self.path) if isfile(join(self.path, f)) and prog.match(f)]
 
+    # Ecriture d'un bloc
+    def writeBlock(self, previous, miner, pow, date, nonce, transactions):
+        # On récupère le numéro de bloc actuel
+        bloc_number = len(Blocks.getList(self))
+        # Génère le contenu du fichier
+        content = 'previous ' + previous + '\n'
+        content += 'miner ' + miner + '\n'
+        content += 'pow ' + str(pow) + '\n'
+        content += 'date' + date + '\n'
+        content += 'nonce ' + str(nonce) + '\n'
+        content += 'transactions ' + ' '.join(transactions)
+        # Hash le fichier
+        id = str(bloc_number) + '.' + hashlib.md5(content.encode()).hexdigest()
+        # Ecrit le fichier
+        f = open(self.path + id, 'w+')
+        f.write(content)
+        f.close()
+        # Retourne l'ID du block créé
+        return id
 
 # Test
 if __name__ == '__main__':
-    node = 'nodes_1'
+    node = 'node_1'
     blocks = Blocks(node)
-    print(blocks.getList())
-
+    l = blocks.getList()
+    print(l)
+    print(blocks.getBlock(l[0]))
+    blocks.writeBlock('---', 'miner-name', 16, '17/09/1996', 1343, '')

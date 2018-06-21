@@ -1,5 +1,6 @@
 import os
 import hashlib as hl
+from os.path import isfile
 
 """
 Classe TransactionParent
@@ -27,8 +28,8 @@ class TransactionParent:
     """
     Retourne la liste des transactions
     """
-    def listTrans(self, path):
-        return os.listdir(path)
+    def listTrans(self):
+        return os.listdir(self.path)
 
     """
     Retourne une transaction sous forme de dictionnaire
@@ -55,11 +56,33 @@ class TransactionParent:
     """
     Ecrit une nouvelle transaction dans un fichier
     """
-    def writeTrans(self, path):
+    def writeTrans(self, src, dest, amount, fees):
+        chaine = "from " + src + "\nto " + dest + "\namount " + amount + " units\nfees " + fees + " units"
+        nameFile = hl.md5(chaine.encode()).hexdigest()
+        filePath = self.path + "/" + nameFile
+
+        ## test si le fichier existe deja
+        if isfile(filePath):
+            file = open(filePath, 'w')
+            file.write(chaine)
+            file.close()
+        else:
+            return False
+
         return
 
 
 if __name__ == '__main__':
-    trans = TransactionParent(False, "nodes_1")
-    print(trans.listTrans(trans.path))
-    print(trans.readTrans('1.edb53223550477e2'))
+    # transaction
+    trans = TransactionParent(True, "node_1")
+    trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '40000', '10')
+    trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
+    print(trans.listTrans())
+    print(trans.readTrans('f16d7429acd70873e9377290333f3334'))
+
+    # pending transaction
+    trans = TransactionParent(False, "node_3")
+    trans.writeTrans('3.6764f46975c7de06', '3.5541f46975c7de06', '100', '1')
+    print(trans.listTrans())
+    print(trans.readTrans('c997d20e015a6d378c7266d5cc504fa8'))
+

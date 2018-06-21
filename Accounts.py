@@ -61,7 +61,6 @@ class Accounts:
 
         if mustExists:
             with open(fileName, 'r') as f:
-                print(f.read())
                 return f.read()
 
 # TESTS
@@ -80,5 +79,5 @@ if __name__ == '__main__':
     print(newAccount1._get_new_hash()+" != "+newAccount1._get_new_hash())
     # test accounts list
     print("Accounts list : "+str(newAccount1._get_accounts_list()))
-    #
-    newAccount1.get_account_amount(account11)
+    # test get account amount
+    print("Amount of "+account11+" = "+newAccount1.get_account_amount(account11)+" [=? 400]")

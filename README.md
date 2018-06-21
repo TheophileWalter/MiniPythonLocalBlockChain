@@ -5,7 +5,7 @@ Projet du cours Blockchain
 Node = Miner
 
 ### TODO list
-- [ ] Class : **Main.py**
+- [ ] Class : **Main.py** lance soit un client soit un mineur
 
 - [ ] Class : **Blocks.py** _Théophile_
   - [x] _init_(self, nodeName)
@@ -42,5 +42,8 @@ Node = Miner
   - [x] _init_(self)
   - [x] get_date(self)
   - [x] tests
-  
-- [ ] Class : **Node.py**
+
+- [ ] Class : **Node.py** ajouter methode pour miner (1 thread pow, 1 verif validation block)
+
+- [ ] Class : **Client.py** ajouter des news transactions, vérifier ses comptes
+

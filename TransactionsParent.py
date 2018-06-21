@@ -23,7 +23,7 @@ class TransactionssParent:
         if b == True:
             self.path = "nodes/"+node+"/transactions"
         else:
-            self.path = "nodes/"+node+"/pendingTransactions"
+            self.path = "nodes/"+node+"/pending-transactions"
 
     """
     Retourne la liste des transactions

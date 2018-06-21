@@ -70,7 +70,7 @@ _main () {
 
     _create_template block
     _create_template transaction
-    _create_template pendingTransaction
+    _create_template pending-transaction
 
     mkdir ./nodes/node_1/accounts
 

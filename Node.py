@@ -76,6 +76,8 @@ class Node:
         hashBin = bin(hashInt)
         return hashBin[3:]
 
+    # Get 
+
     # Thread mining blocks
     def miningBlock(self):
         # if thread not already launched
@@ -86,9 +88,12 @@ class Node:
             # while stringHash not found
             while not stringHash.startswith(stringOfZeros):
                 stringHash = _get_new_hash()
+            
+            # TODO CREATE NEW BLOCK
+            
+            print(True)
             self.thread_checkBlock._stop()
             self.thread_miningBlock._stop()
-            print(True)
         else:
             print(False)
     
@@ -108,9 +113,12 @@ class Node:
                     for i in nodesList:
                         blocksList = [files for roots, dirs, files in os.walk("./nodes/"+i+"/blocks/")]
                         whileCdt = lastBlockFile > max(blocksList)
+                
+                # TODO GET NEW BLOCK ON RIGHT NODE
+                
+                print(True)
                 self.thread_miningBlock._stop()
                 self.thread_checkBlock._stop()
-                print(True)
             else:
                 print(False)
         else:

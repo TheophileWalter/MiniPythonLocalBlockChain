@@ -69,31 +69,41 @@ class Node:
             self.transactions.writeTrans(infos['from'], infos['to'], infos['amount'], infos['fees'])
 
     # Get new hash with md5
-    def _get_new_hash():
+    def _get_new_hash(self):
         intToHash = random.randint(0, 2**128-1)
         hashHexa = hashlib.md5(str(intToHash).encode()).hexdigest()
         hashInt = int(hashHexa, 16)
         hashBin = bin(hashInt)
         return hashBin[3:]
 
-    # Get 
+    # Get higher block
+    def getHigherBlock(self):
+        blocksList = self.blocks.getList()
+         # if there is blocks
+            if len(blocksList) != 0:
+                return = max(blocksList)
+            else:
+                return False
 
     # Thread mining blocks
     def miningBlock(self):
         # if thread not already launched
         if not self.thread_miningBlock:
-            nbOfZeros = 20
-            stringOfZeros = "0" * int(nbOfZeros)
-            stringHash = _get_new_hash()
-            # while stringHash not found
-            while not stringHash.startswith(stringOfZeros):
-                stringHash = _get_new_hash()
-            
-            # TODO CREATE NEW BLOCK
-            
-            print(True)
-            self.thread_checkBlock._stop()
-            self.thread_miningBlock._stop()
+            if not Node.getHigherBlock(self):
+                return False
+            else:
+                nbOfZeros = 20
+                stringOfZeros = "0" * int(nbOfZeros)
+                stringHash = Node._get_new_hash()
+                # while stringHash not found
+                while not stringHash.startswith(stringOfZeros):
+                    stringHash = Node._get_new_hash()
+                
+                # TODO CREATE NEW BLOCK
+                
+                print(True)
+                self.thread_checkBlock._stop()
+                self.thread_miningBlock._stop()
         else:
             print(False)
     

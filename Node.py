@@ -6,6 +6,7 @@ from Accounts import Accounts
 from Blocks import Blocks
 from PendingTransactions import PendingTransactions
 from Transactions import Transactions
+import threading
 
 # Représente un noeud
 class Node:
@@ -25,6 +26,8 @@ class Node:
         self.name = nodeName
         self.path = 'nodes/' + nodeName + '/'
         self.name = nodeName
+        self.thread_miningBlock = False
+        self.thread_checkBlock = False
         # Vérifie si le répertoire n'existe pas
         if not os.path.isdir(self.path):
             self.initialized = False
@@ -64,6 +67,69 @@ class Node:
         for id in distant.transactions.listTrans():
             infos = distant.transactions.readTrans(id)
             self.transactions.writeTrans(infos['from'], infos['to'], infos['amount'], infos['fees'])
+
+    # Get new hash with md5
+    def _get_new_hash():
+        intToHash = random.randint(0, 2**128-1)
+        hashHexa = hashlib.md5(str(intToHash).encode()).hexdigest()
+        hashInt = int(hashHexa, 16)
+        hashBin = bin(hashInt)
+        return hashBin[3:]
+
+    # Thread mining blocks
+    def miningBlock(self):
+        # if thread not already launched
+        if not self.thread_miningBlock:
+            nbOfZeros = 20
+            stringOfZeros = "0" * int(nbOfZeros)
+            stringHash = _get_new_hash()
+            # while stringHash not found
+            while not stringHash.startswith(stringOfZeros):
+                stringHash = _get_new_hash()
+            self.thread_checkBlock._stop()
+            self.thread_miningBlock._stop()
+            print(True)
+        else:
+            print(False)
+    
+        # Thread check blocks
+    def checkBlock(self):
+        # if thread not already launched
+        if not self.thread_checkBlock:
+            blocksList = [files for roots, dirs, files in os.walk(self.path+"/blocks/")]
+            # if there is blocks
+            if len(blocksList) != 0:
+                lastBlockFile = max(blocksList)
+                # while no new block file
+                whileCdt = True
+                while whileCdt:
+                    nodesList = os.listdir("./nodes/")
+                    # for each node
+                    for i in nodesList:
+                        blocksList = [files for roots, dirs, files in os.walk("./nodes/"+i+"/blocks/")]
+                        whileCdt = lastBlockFile > max(blocksList)
+                self.thread_miningBlock._stop()
+                self.thread_checkBlock._stop()
+                print(True)
+            else:
+                print(False)
+        else:
+            print(False)
+
+    # Launch threads
+    def launchThreads(self):
+        self.thread_miningBlock = threading.Thread(target=miningBlock, args=(self,))
+        self.thread_checkBlock = threading.Thread(target=checkBlock, args=(self,))
+        
+        self.thread_miningBlock.start()
+        self.thread_checkBlock.start()
+
+        whileCft = True
+        while whileCdt:
+            if 
+
+
+
 
 if __name__ == '__main__':
     node = Node('node_1')

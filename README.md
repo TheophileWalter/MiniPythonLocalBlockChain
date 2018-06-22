@@ -7,28 +7,28 @@ Node = Miner
 ### TODO list
 - [ ] Class : **Main.py** lance soit un client soit un mineur
 
-- [ ] Class : **Blocks.py** _Théophile_
+- [x] Class : **Blocks.py** _Théophile_
   - [x] _init_(self, nodeName)
   - [x] getBlock(self, id)
   - [x] getList(self)
   - [x] writeBlock(self, previous, miner, pow, date, nonce, transactions)
   - [x] tests
 
-- [ ] Class : **TransactionsParent.py** (classe mère de Transactions et PendingTransactions, définit le dossier où chercher) _Alice_
+- [x] Class : **TransactionsParent.py** (classe mère de Transactions et PendingTransactions, définit le dossier où chercher) _Alice_
   - [x] _init_(self, b, node)
   - [x] listTrans(self)
   - [x] readTrans(self, trans)
   - [x] writeTrans(self, src, dest, amount, fees)
   - [x] tests
 
-- [ ] Class : **Transactions.py** (hérite de TransactionsParent) _Alice_
+- [x] Class : **Transactions.py** (hérite de TransactionsParent) _Alice_
   - [x] _init_(self, node)
 
-- [ ] Class : **PendingTransactions.py** (hérite de TransactionsParent) _Alice_
+- [x] Class : **PendingTransactions.py** (hérite de TransactionsParent) _Alice_
   - [x] _init_(self, node)
   - [x] transDelete(self,trans)
 
-- [ ] Class : **Accounts.py** _Alexis_
+- [x] Class : **Accounts.py** _Alexis_
   - [x] _init_(self, nodeName)
   - [x] _get_new_hash(self)
   - [x] _get_accounts_list(self)
@@ -43,7 +43,15 @@ Node = Miner
   - [x] get_date(self)
   - [x] tests
 
-- [ ] Class : **Node.py** ajouter methode pour miner (1 thread pow, 1 verif validation block)
+- [ ] Class : **Node.py** 
+  - [x] __get_attributes__(self)
+  - [x] __init__(self, nodeName)
+  - [x] create(self)
+  - [x] copyFrom(self, nodeName)
 
-- [ ] Class : **Client.py** ajouter des news transactions, vérifier ses comptes
+- [x] Class : **Client.py** _Alice_
+  - [x] _init_(self, node, id)
+  - [x] createAccount(self, amount)
+  - [x] addTrans(self, dest, amount, fees)
+  - [x] getBalance(self)
 

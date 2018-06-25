@@ -68,9 +68,17 @@ class Node:
             self.transactions.writeTrans(infos['from'], infos['to'], infos['amount'], infos['fees'])
 
     # Get new hash with md5
-    def _get_new_hash(self):
+    def _get_new_hash(self, previous, pow, date, transactions):
         intToHash = random.randint(0, 2**128-1)
-        hashHexa = hashlib.md5(str(intToHash).encode()).hexdigest()
+
+        block =  'previous ' + previous + '\n'
+        block += 'miner ' + self.name + '\n'
+        block += 'pow' + pow + '\n'
+        block += 'date ' + date + '\n'
+        block += 'nonce ' + str(intToHash) + '\n'
+        block += 'transactions ' + transactions + '\n'
+
+        hashHexa = hashlib.md5(block.encode()).hexdigest()
         hashInt = int(hashHexa, 16)
         hashBin = bin(hashInt)
         return hashBin[3:]
@@ -79,10 +87,10 @@ class Node:
     def getHigherBlock(self):
         blocksList = self.blocks.getList()
          # if there is blocks
-            if len(blocksList) != 0:
-                return = max(blocksList)
-            else:
-                return False
+        if len(blocksList) != 0:
+            return = max(blocksList)
+        else:
+            return False
 
     # Thread mining blocks
     def miningBlock(self):

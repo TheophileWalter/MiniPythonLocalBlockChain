@@ -6,7 +6,6 @@ from Accounts import Accounts
 from Blocks import Blocks
 from PendingTransactions import PendingTransactions
 from Transactions import Transactions
-import threading
 
 # Représente un noeud
 class Node:
@@ -87,64 +86,49 @@ class Node:
 
     # Thread mining blocks
     def miningBlock(self):
-        # if thread not already launched
-        if not self.thread_miningBlock:
-            if not Node.getHigherBlock(self):
-                return False
-            else:
-                nbOfZeros = 20
-                stringOfZeros = "0" * int(nbOfZeros)
+        if Node.getHigherBlock(self):
+            nbOfZeros = 20
+            stringOfZeros = "0" * int(nbOfZeros)
+            stringHash = Node._get_new_hash()
+            # while stringHash not found
+            while not stringHash.startswith(stringOfZeros):
                 stringHash = Node._get_new_hash()
-                # while stringHash not found
-                while not stringHash.startswith(stringOfZeros):
-                    stringHash = Node._get_new_hash()
-                
-                # TODO CREATE NEW BLOCK
-                
-                print(True)
-                self.thread_checkBlock._stop()
-                self.thread_miningBlock._stop()
+            
+            # TODO CREATE NEW BLOCK
+            
+            return True
         else:
-            print(False)
+            return False
     
         # Thread check blocks
     def checkBlock(self):
-        # if thread not already launched
-        if not self.thread_checkBlock:
-            blocksList = [files for roots, dirs, files in os.walk(self.path+"/blocks/")]
-            # if there is blocks
-            if len(blocksList) != 0:
-                lastBlockFile = max(blocksList)
-                # while no new block file
-                whileCdt = True
-                while whileCdt:
-                    nodesList = os.listdir("./nodes/")
-                    # for each node
-                    for i in nodesList:
-                        blocksList = [files for roots, dirs, files in os.walk("./nodes/"+i+"/blocks/")]
-                        whileCdt = lastBlockFile > max(blocksList)
-                
-                # TODO GET NEW BLOCK ON RIGHT NODE
-                
-                print(True)
-                self.thread_miningBlock._stop()
-                self.thread_checkBlock._stop()
-            else:
-                print(False)
+        blocksList = [files for roots, dirs, files in os.walk(self.path+"/blocks/")]
+        # if there is blocks
+        if len(blocksList) != 0:
+            lastBlockFile = max(blocksList)
+            # while no new block file
+            whileCdt = True
+            while whileCdt:
+                nodesList = os.listdir("./nodes/")
+                # for each node
+                for i in nodesList:
+                    blocksList = [files for roots, dirs, files in os.walk("./nodes/"+i+"/blocks/")]
+                    whileCdt = lastBlockFile > max(blocksList)
+            
+            # TODO GET NEW BLOCK ON RIGHT NODE
+            
+            return True
         else:
-            print(False)
+            return False
 
     # Launch threads
     def launchThreads(self):
-        self.thread_miningBlock = threading.Thread(target=miningBlock, args=(self,))
-        self.thread_checkBlock = threading.Thread(target=checkBlock, args=(self,))
-        
-        self.thread_miningBlock.start()
-        self.thread_checkBlock.start()
-
-        whileCft = True
-        while whileCdt:
-            if 
+        while True:
+            if Node.checkBlock(self):
+                break
+            if Node.miningBlock(self):
+                break
+            
 
 
 

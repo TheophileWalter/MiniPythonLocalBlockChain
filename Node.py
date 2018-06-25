@@ -110,24 +110,22 @@ class Node:
     
         # Thread check blocks
     def checkBlock(self):
-        blocksList = [files for roots, dirs, files in os.walk(self.path+"/blocks/")]
-        # if there is blocks
-        if len(blocksList) != 0:
-            lastBlockFile = max(blocksList)
-            # while no new block file
-            whileCdt = True
-            while whileCdt:
-                nodesList = os.listdir("./nodes/")
-                # for each node
-                for i in nodesList:
-                    blocksList = [files for roots, dirs, files in os.walk("./nodes/"+i+"/blocks/")]
-                    whileCdt = lastBlockFile > max(blocksList)
-            
-            # TODO GET NEW BLOCK ON RIGHT NODE
-            
-            return True
-        else:
-            return False
+        blocksList = self.blocks.getList()
+        lastBlockFile = max(blocksList)
+        result = False
+        # for each node
+        for node in os.listdir('./nodes/'):
+            # On cherche tous les blocs plus grands que celui actuel
+            foreignNode = Blocks(node)
+            for block in foreignNode.getList():
+                if block > lastBlockFile:
+                # On récupère le bloc et on indique qu'il ne faut plus miner
+                result = True
+                infos = foreignNode.getBlock(block)
+                self.blocks.writeBlock(infos['previous'], infos['miner'], infos['pow'], infos['date'], infos['nonce'], infos['transactions'])
+        return result
+
+
 
     # Launch threads
     def launchThreads(self):

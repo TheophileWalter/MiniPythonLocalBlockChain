@@ -54,10 +54,10 @@ class Blocks:
         # On récupère le numéro de bloc actuel
         bloc_number = len(Blocks.getList(self))
         # Génère le contenu du fichier
-        content = 'previous ' + previous + '\n'
+        content =  'previous ' + previous + '\n'
         content += 'miner ' + miner + '\n'
         content += 'pow ' + str(pow) + '\n'
-        content += 'date' + date + '\n'
+        content += 'date ' + date + '\n'
         content += 'nonce ' + str(nonce) + '\n'
         content += 'transactions ' + ' '.join(transactions)
         # Hash le fichier
@@ -68,6 +68,28 @@ class Blocks:
         f.close()
         # Retourne l'ID du block créé
         return id
+
+    # Ecriture d'un bloc depuis une chaîne de caractères
+    def writeBlockFromString(self, string, hexa):
+        bloc_number = len(Blocks.getList(self))
+        id = str(bloc_number) + '.' + hexa
+        # Ecrit le fichier
+        f = open(self.path + id, 'w+')
+        f.write(string)
+        f.close()
+        # Retourne l'ID du block créé
+        return id
+
+    # Création du bloc genèse
+    def createFirstBlock(self):
+        content = """previous -1.---
+miner God
+pow 0
+date Mon-Jun-12--11:02:03--+00-2000
+nonce 0
+transactions"""
+        hexa = '27f90419199d42318e4ac063ceaf8dfd'
+        return Blocks.writeBlockFromString(self, content, hexa)
 
 # Test
 if __name__ == '__main__':

@@ -1,11 +1,14 @@
 # coding=utf-8
 
 import os
+import hashlib
 from random import randint
 from Accounts import Accounts
 from Blocks import Blocks
 from PendingTransactions import PendingTransactions
 from Transactions import Transactions
+from Date import Date
+import binascii
 
 # Représente un noeud
 class Node:
@@ -16,6 +19,7 @@ class Node:
         self.blocks = Blocks(self.name)
         self.pendingTransactions = PendingTransactions(self.name)
         self.transactions = Transactions(self.name)
+        self.POW = 15 # Difficulté
 
     # Constructeur de la classe
     #
@@ -67,83 +71,96 @@ class Node:
             infos = distant.transactions.readTrans(id)
             self.transactions.writeTrans(infos['from'], infos['to'], infos['amount'], infos['fees'])
 
+    # Transforme une chaîne hexadécimale en chaîne binaire
+    # Source : https://walter.click/Kok9yQ
+    def _binary(x):
+        return " ".join(reversed( [i+j for i,j in zip( *[ ["{0:04b}".format(int(c,16)) for c in reversed("0"+x)][n::2] for n in [1,0] ] ) ] ))
+
     # Get new hash with md5
     def _get_new_hash(self, previous, pow, date, transactions):
-        intToHash = random.randint(0, 2**128-1)
+        intToHash = randint(0, 2**128-1)
 
         block =  'previous ' + previous + '\n'
         block += 'miner ' + self.name + '\n'
-        block += 'pow' + pow + '\n'
+        block += 'pow ' + str(pow) + '\n'
         block += 'date ' + date + '\n'
         block += 'nonce ' + str(intToHash) + '\n'
-        block += 'transactions ' + transactions + '\n'
+        block += 'transactions ' + transactions
 
         hashHexa = hashlib.md5(block.encode()).hexdigest()
-        hashInt = int(hashHexa, 16)
-        hashBin = bin(hashInt)
-        return hashBin[3:]
+        hashBin = Node._binary(hashHexa)
+        return [block, hashBin.replace(' ', ''), hashHexa]
 
     # Get higher block
     def getHigherBlock(self):
         blocksList = self.blocks.getList()
          # if there is blocks
         if len(blocksList) != 0:
-            return = max(blocksList)
+            id_max = max(map(lambda e: int(e.split('.')[0]), blocksList))
+            for e in blocksList:
+                if e.startswith(str(id_max) + '.'):
+                    return e
+            return False
         else:
             return False
 
-    # Thread mining blocks
+    # Essaye de miner le bloc
     def miningBlock(self):
-        if Node.getHigherBlock(self):
-            nbOfZeros = 20
-            stringOfZeros = "0" * int(nbOfZeros)
-            stringHash = Node._get_new_hash()
+        higher = Node.getHigherBlock(self)
+        if higher != False:
+            stringOfZeros = "0" * int(self.POW)
+            d = Date()
+            block = Node._get_new_hash(self, higher, self.POW, d.get_date(), ' '.join(self.pendingTransactions.listTrans()))
             # while stringHash not found
-            while not stringHash.startswith(stringOfZeros):
-                stringHash = Node._get_new_hash()
-            
-            # TODO CREATE NEW BLOCK
-            
-            return True
-        else:
-            return False
+            if block[1].startswith(stringOfZeros):
+                # On crée le bloc
+                self.blocks.writeBlockFromString(block[0], block[2])
+                # On affiche un message
+                print('New block mined with hash ' + block[2] + '\n' + block[0] + '\n\n')
+                return True
+        return False
     
-        # Thread check blocks
+    # Vérifie si le bloc a été miné par un autre noeud
     def checkBlock(self):
         blocksList = self.blocks.getList()
-        lastBlockFile = max(blocksList)
+        lastBlockFile = max(map(lambda e: int(e.split('.')[0]), blocksList))
         result = False
         # for each node
         for node in os.listdir('./nodes/'):
-            # On cherche tous les blocs plus grands que celui actuel
-            foreignNode = Blocks(node)
-            for block in foreignNode.getList():
-                if block > lastBlockFile:
-                # On récupère le bloc et on indique qu'il ne faut plus miner
-                result = True
-                infos = foreignNode.getBlock(block)
-                self.blocks.writeBlock(infos['previous'], infos['miner'], infos['pow'], infos['date'], infos['nonce'], infos['transactions'])
-        return result
-
-
+            # On s'assure qu'on essaye pas de copier nos propres blocs
+            if node != self.name:
+                # On cherche tous les blocs plus grands que celui actuel
+                foreignBlocks = Blocks(node)
+                blocksListF = foreignBlocks.getList()
+                blocksListF.sort()
+                for block in blocksListF:
+                    if int(block.split('.')[0]) > lastBlockFile:
+                        # On récupère le bloc et on indique qu'il ne faut plus miner
+                        result = True
+                        infos = foreignBlocks.getBlock(block)
+                        self.blocks.writeBlock(infos['previous'], infos['miner'], infos['pow'], infos['date'], infos['nonce'], infos['transactions'])
+                        # Affiche un message
+                        print('New block get from foreign node with ID ' + block)
+                # Si le bloc a été miné, on quitte sans vérifier les autres noeuds
+                if result:
+                    return True
+        return False
 
     # Launch threads
-    def launchThreads(self):
+    def mine(self):
         while True:
             if Node.checkBlock(self):
                 break
             if Node.miningBlock(self):
                 break
-            
-
-
-
 
 if __name__ == '__main__':
-    node = Node('node_1')
-    assert node.initialized
-    node2 = Node('node_' + str(randint(0, 2**32-1)))
-    assert not node2.initialized
-    node2.create()
-    assert node2.initialized
-    node2.cropyFrom('node_1')
+    # On créer un noeud
+    name = 'node_' + str(randint(0, 2**32-1))
+    node = Node(name)
+    node.create()
+    # Crée le noeud de départ
+    node.blocks.createFirstBlock()
+    # Tente de miner le block suivant
+    while True:
+        node.mine()

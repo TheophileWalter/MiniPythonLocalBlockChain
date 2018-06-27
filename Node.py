@@ -20,18 +20,15 @@ class Node:
         self.blocks = Blocks(self.name)
         self.pendingTransactions = PendingTransactions(self.name)
         self.transactions = Transactions(self.name)
-        self.POW = 15 # Difficulté
 
     # Constructeur de la classe
     #
     # Prend le nom du noeud en paramètres, si il n'existe pas, l'attribut 'initialized' est mis à False
     # Il faut dans ce cas appeller la méthode 'create'
     def __init__(self, nodeName):
+        self.POW = 16 # Difficulté
         self.name = nodeName
         self.path = 'nodes/' + nodeName + '/'
-        self.name = nodeName
-        self.thread_miningBlock = False
-        self.thread_checkBlock = False
         # Vérifie si le répertoire n'existe pas
         if not os.path.isdir(self.path):
             self.initialized = False
@@ -186,7 +183,7 @@ if __name__ == '__main__':
     node = Node(name)
     if not node.initialized:
         node.create()
-    # Crée le noeud de départ
+    # Crée le bloc de départ
     node.blocks.createFirstBlock()
     # Tente de miner le block suivant
     while True:

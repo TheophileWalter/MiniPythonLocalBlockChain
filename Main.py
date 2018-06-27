@@ -2,6 +2,11 @@
 # Projet de Mini Blockchain
 
 import sys
+import os
+from Node import Node
+from NodeMemory import NodeMemory
+from random import randint
+import shutil
 
 if __name__ == '__main__':
     # Récupération des paramètres
@@ -41,8 +46,33 @@ if __name__ == '__main__':
         exit(1)
 
     if mono_memory:
-        # Todo: Lancer un noeud en mémoire
+        # Lance un noeud en mémoire
+        node = NodeMemory('mono-memory')
+        # Tente de miner le block suivant
+        last = 'first'
+        while True:
+            last = node.mine(last)
     elif mono_disk:
-        # Todo: Lancer un noeud sur disque
+        # Prépare un dossier pour le dique seul
+        os.chdir('./mono/')
+        shutil.rmtree('./nodes/', ignore_errors=True)
+        os.makedirs('./nodes/')
+        # Lance un noeud seul sur le disque
+        node = Node('mono-disk')
+        if not node.initialized:
+            node.create()
+        # Crée le bloc de départ
+        node.blocks.createFirstBlock()
+        # Tente de miner le block suivant
+        while True:
+            node.mine()
     elif miner != '':
-        # Todo: Lancer un noeud qui a rejoindre le réseau
+        # Lance un noeud qui va rejoindre le réseau
+        node = Node(miner)
+        if not node.initialized:
+            node.create()
+        # Crée le bloc de départ
+        node.blocks.createFirstBlock()
+        # Tente de miner le block suivant
+        while True:
+            node.mine()

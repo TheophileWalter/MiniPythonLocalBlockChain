@@ -41,13 +41,19 @@ class Blocks:
                 elif line != '':
                     return False
             f.close()
+        # Vérifie si tous les éléments sont présents
+        if len(block) != 6:
+            return False
         return block
 
     # Récupère la liste des blocs de la chaîne
     def getList(self):
         # Liste les fichiers (avec vérification du format)
         prog = re.compile(r"^\d+\.[\da-f]{1,64}$")
-        return [f for f in listdir(self.path) if isfile(join(self.path, f)) and prog.match(f)]
+        try: # Exception if directory does'nt exists
+            return [f for f in listdir(self.path) if isfile(join(self.path, f)) and prog.match(f)]
+        except:
+            return []
 
     # Ecriture d'un bloc
     def writeBlock(self, previous, miner, pow, date, nonce, transactions):

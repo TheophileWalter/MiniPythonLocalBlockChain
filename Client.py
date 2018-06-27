@@ -1,5 +1,6 @@
 from PendingTransactions import PendingTransactions
 from Accounts import Accounts
+from Node import Node
 import os
 
 """
@@ -42,6 +43,11 @@ class Client:
 
 # TESTS
 if __name__ == '__main__':
+    # Crée un noeud
+    n1 = Node('node_1')
+    if not n1.initialized:
+        n1.create()
+
     # nouveau client c1
     c1 = Client('node_1', "")
     c1.createAccount(4000)

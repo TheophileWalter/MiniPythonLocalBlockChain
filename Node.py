@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import os
+import sys
 import hashlib
 from random import randint
 from Accounts import Accounts
@@ -110,13 +111,23 @@ class Node:
         if higher != False:
             stringOfZeros = "0" * int(self.POW)
             d = Date()
-            block = Node._get_new_hash(self, higher, self.POW, d.get_date(), ' '.join(self.pendingTransactions.listTrans()))
+            transactions = self.pendingTransactions.listValidTrans(self.accounts)
+            block = Node._get_new_hash(self, higher, self.POW, d.get_date(), ' '.join(transactions))
             # while stringHash not found
             if block[1].startswith(stringOfZeros):
+                # On valide les transactions
+                for t in transactions:
+                    # Copié la transaction depuis celles en attente vers celles valides
+                    current = self.pendingTransactions.readTrans(t)
+                    self.pendingTransactions.transDelete(t)
+                    self.transactions.writeTrans(current['from'], current['to'], current['amount'], current['fees'])
+                    # Met à jour les comptes
+                    self.accounts.modify_account(current['from'], self.accounts.get_account_amount(current['from']) - float(current['amount']) - float(current['fees']))
+                    self.accounts.modify_account(current['to'], self.accounts.get_account_amount(current['to']) + float(current['amount']))
                 # On crée le bloc
                 self.blocks.writeBlockFromString(block[0], block[2])
                 # On affiche un message
-                print('New block mined with hash ' + block[2] + '\n' + block[0] + '\n\n')
+                print('\nNew block mined with hash ' + block[2] + '\n' + block[0] + '\n')
                 return True
         return False
     
@@ -131,6 +142,8 @@ class Node:
             if node != self.name:
                 # On cherche tous les blocs plus grands que celui actuel
                 foreignBlocks = Blocks(node)
+                foreignTransactions = Transactions(node)
+                foreignAccounts = Accounts(node)
                 blocksListF = foreignBlocks.getList()
                 blocksListF.sort()
                 for block in blocksListF:
@@ -138,7 +151,17 @@ class Node:
                         # On récupère le bloc et on indique qu'il ne faut plus miner
                         result = True
                         infos = foreignBlocks.getBlock(block)
+                        # Vérifie que les informations ont bien été lues
+                        # Sinon essaye de les relire
+                        while not infos:
+                            infos = foreignBlocks.getBlock(block)
                         self.blocks.writeBlock(infos['previous'], infos['miner'], infos['pow'], infos['date'], infos['nonce'], infos['transactions'])
+                        # On récupère les transactions de ce bloc et met à jour les comptes
+                        for t in infos['transactions']:
+                            trans = foreignTransactions.readTrans(t)
+                            self.transactions.writeTrans(trans['from'], trans['to'], trans['amount'], trans['fees'])
+                            self.accounts.modify_account(trans['from'], foreignAccounts.get_account_amount(trans['from']))
+                            self.accounts.modify_account(trans['to'], foreignAccounts.get_account_amount(trans['to']))
                         # Affiche un message
                         print('New block get from foreign node with ID ' + block)
                 # Si le bloc a été miné, on quitte sans vérifier les autres noeuds
@@ -156,9 +179,13 @@ class Node:
 
 if __name__ == '__main__':
     # On créer un noeud
-    name = 'node_' + str(randint(0, 2**32-1))
+    if len(sys.argv) >= 2:
+        name = sys.argv[1]
+    else:
+        name = 'node_' + str(randint(0, 2**32-1))
     node = Node(name)
-    node.create()
+    if not node.initialized:
+        node.create()
     # Crée le noeud de départ
     node.blocks.createFirstBlock()
     # Tente de miner le block suivant

@@ -21,6 +21,25 @@ class PendingTransactions(TransactionsParent):
     def transDelete(self,trans):
         os.remove(self.path + '/' + trans)
 
+    
+    """
+    Retourne la liste des transactions valides
+    Peut prendre un objet Account en paramètres, si il n'est pas donné alors un objet sera créé dans le noeud actuel
+    """
+    def listValidTrans(self, accounts = False):
+        if not accounts:
+            accounts = Accounts(self.name)
+        trans = PendingTransactions.listTrans(self)
+        valid = []
+        for t in trans:
+            infos = PendingTransactions.readTrans(self, t)
+            amountFrom = accounts.get_account_amount(infos['from'])
+            amountTo = accounts.get_account_amount(infos['to'])
+            # Vérifie la transaction
+            if amountFrom >= (float(infos['amount']) + float(infos['fees'])) and amountTo != -1:
+                valid.append(t)
+        return valid
+
 
 if __name__ == '__main__':
     trans = PendingTransactions('node_1')

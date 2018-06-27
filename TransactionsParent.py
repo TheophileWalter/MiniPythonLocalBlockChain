@@ -19,6 +19,7 @@ class TransactionsParent:
     node: le noeud dans lequel est/sera placée la transaction 
     """
     def __init__(self, b, node):
+        self.name = node
 
         if b == True:
             self.path = "nodes/"+node+"/transactions"
@@ -50,7 +51,6 @@ class TransactionsParent:
                     d[word[0]] = word[1]
                 elif line != '':
                     return False
-
         return d
 
     """

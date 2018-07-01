@@ -15,9 +15,10 @@ class Blocks:
     # 
     # @params
     #   - nodeName : Le nom du noeud
-    def __init__(self, nodeName):
+    def __init__(self, nodeName, nodePath):
         # Enregiste l'emplacement des blocs
-        self.path = 'nodes/' + nodeName + '/blocks/'
+        self.path = nodePath + 'blocks/' if nodePath[-1] == '/' else nodePath + '/blocks/'
+        self.name = nodeName
 
     # Récupère un bloc donné (en fonction de son ID)
     # Retourne False en cas d'erreur
@@ -99,8 +100,7 @@ transactions"""
 
 # Test
 if __name__ == '__main__':
-    node = 'node_1'
-    blocks = Blocks(node)
+    blocks = Blocks('node_1', './node_1')
     l = blocks.getList()
     print(l)
     print(blocks.getBlock(l[0]))

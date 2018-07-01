@@ -15,7 +15,7 @@ class Client:
 
     def __init__(self, node, id):
         self.node = node
-        self.account = Accounts(node)
+        self.account = Accounts('', node)
         self.id = id
 
     """
@@ -28,7 +28,7 @@ class Client:
     Ajoute une nouvelle transaction dans pending-transactions
     """
     def addTrans(self, dest, amount, fees):
-        trans = PendingTransactions(self.node)
+        trans = PendingTransactions('', self.node)
         tr = trans.writeTrans(self.id, dest, amount, fees)
         return tr
 
@@ -44,7 +44,7 @@ class Client:
 # TESTS
 if __name__ == '__main__':
     # Crée un noeud
-    n1 = Node('node_1')
+    n1 = Node('node_1', './node_1', [])
     if not n1.initialized:
         n1.create()
 

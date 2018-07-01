@@ -12,8 +12,8 @@ class PendingTransactions(TransactionsParent):
     """
     Initialise une transaction en attente
     """
-    def __init__(self, node):
-        super().__init__(False, node)
+    def __init__(self, name, node):
+        super().__init__(False, name, node)
 
     """
     Supprime une transaction (une fois qu'elle entre dans un bloc)
@@ -42,7 +42,7 @@ class PendingTransactions(TransactionsParent):
 
 
 if __name__ == '__main__':
-    trans = PendingTransactions('node_1')
+    trans = PendingTransactions('node_1', './node_1')
     print("Trans list = "+str(trans.listTrans()))
     tr1 = trans.writeTrans('3.6764f46975c7de06', '3.5541f46975c7de06', '100', '1')
     print("tr1 = "+str(tr1)+" : OK")

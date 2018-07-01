@@ -16,19 +16,20 @@ class Node:
 
     # Instancie les attributs du noeud
     def __get_attributes__(self):
-        self.accounts = Accounts(self.name)
-        self.blocks = Blocks(self.name)
-        self.pendingTransactions = PendingTransactions(self.name)
-        self.transactions = Transactions(self.name)
+        self.accounts = Accounts(self.name, self.path)
+        self.blocks = Blocks(self.name, self.path)
+        self.pendingTransactions = PendingTransactions(self.name, self.path)
+        self.transactions = Transactions(self.name, self.path)
 
     # Constructeur de la classe
     #
     # Prend le nom du noeud en paramètres, si il n'existe pas, l'attribut 'initialized' est mis à False
     # Il faut dans ce cas appeller la méthode 'create'
-    def __init__(self, nodeName):
+    def __init__(self, nodeName, workingDir, peers):
         self.POW = 16 # Difficulté
         self.name = nodeName
-        self.path = 'nodes/' + nodeName + '/'
+        self.path = workingDir if workingDir[-1] == '/' else workingDir + '/'
+        self.peers = peers
         # Vérifie si le répertoire n'existe pas
         if not os.path.isdir(self.path):
             self.initialized = False
@@ -134,13 +135,13 @@ class Node:
         lastBlockFile = max(map(lambda e: int(e.split('.')[0]), blocksList))
         result = False
         # for each node
-        for node in os.listdir('./nodes/'):
+        for node in self.peers:
             # On s'assure qu'on essaye pas de copier nos propres blocs
             if node != self.name:
                 # On cherche tous les blocs plus grands que celui actuel
-                foreignBlocks = Blocks(node)
-                foreignTransactions = Transactions(node)
-                foreignAccounts = Accounts(node)
+                foreignBlocks = Blocks('', node)
+                foreignTransactions = Transactions('', node)
+                foreignAccounts = Accounts('', node)
                 blocksListF = foreignBlocks.getList()
                 blocksListF.sort()
                 for block in blocksListF:
@@ -180,7 +181,7 @@ if __name__ == '__main__':
         name = sys.argv[1]
     else:
         name = 'node_' + str(randint(0, 2**32-1))
-    node = Node(name)
+    node = Node(name, './' + name, [])
     if not node.initialized:
         node.create()
     # Crée le bloc de départ

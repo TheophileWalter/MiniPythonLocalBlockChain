@@ -10,10 +10,10 @@ import random
 class Accounts:
 
     # Method : init
-    # Params : self, nodeName
-    def __init__(self, nodeName):
+    # Params : self, nodePath
+    def __init__(self, nodeName, nodePath):
+        self.nodePath = nodePath + 'accounts' if nodePath[-1] == '/' else nodePath + '/accounts'
         self.nodeName = nodeName
-        self.nodePath = 'nodes/'+nodeName+'/accounts'
 
     # Method : generate new hash
     # Params : self
@@ -68,13 +68,13 @@ class Accounts:
 
 # TESTS
 if __name__ == '__main__':
-    newAccount1 = Accounts('node_1')
+    newAccount1 = Accounts('node_1', './node_1')
     # test create
     account11 = newAccount1.create_account(500)
-    print(account11 + ' : ' + open('./nodes/node_1/accounts/'+account11).read() + ' [=? 500]')
+    print(account11 + ' : ' + open('./node_1/accounts/'+account11).read() + ' [=? 500]')
     # test modify
     newAccount1.modify_account(account11, 400)
-    print(account11+' : ' + open('./nodes/node_1/accounts/'+account11).read() + ' [=? 400]')
+    print(account11+' : ' + open('./node_1/accounts/'+account11).read() + ' [=? 400]')
     # test _check_if_account_already_exists
     print('File already exists : ' + str(newAccount1._check_if_account_already_exists(account11)) + ' [=? True]')
     print('File already exists : ' + str(newAccount1._check_if_account_already_exists('20374ca3ee149e19d5e0a024f7062836')) + ' [=? False]')
@@ -83,4 +83,4 @@ if __name__ == '__main__':
     # test accounts list
     print('Accounts list : ' + str(newAccount1._get_accounts_list()))
     # test get account amount
-    print('Amount of ' + account11 + ' = ' + newAccount1.get_account_amount(account11) + ' [=? 400]')
+    print('Amount of ' + account11 + ' = ' + str(newAccount1.get_account_amount(account11)) + ' [=? 400]')

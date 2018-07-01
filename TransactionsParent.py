@@ -18,13 +18,13 @@ class TransactionsParent:
             False = PendingTransactions
     node: le noeud dans lequel est/sera placée la transaction 
     """
-    def __init__(self, b, node):
-        self.name = node
+    def __init__(self, b, name, node):
+        self.name = name
 
         if b == True:
-            self.path = "nodes/"+node+"/transactions"
+            self.path = node + 'transactions' if node[-1] == '/' else node + '/transactions'
         else:
-            self.path = "nodes/"+node+"/pending-transactions"
+            self.path = node + 'pending-transactions' if node[-1] == '/' else node + '/pending-transactions'
 
     """
     Retourne la liste des transactions
@@ -73,19 +73,19 @@ class TransactionsParent:
 
 if __name__ == '__main__':
     # transaction
-    trans = TransactionsParent(True, "node_1")
+    trans = TransactionsParent(True, "node_1", './node_1')
     tr1 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '40000', '10')
     tr2 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
     tr3 = trans.writeTrans('3.1234f46975c7de06', '3.8749f46975c7de06', '44000', '40')
     print("tr1 = "+str(tr1)+" : OK")
     print("tr2 = "+str(tr2)+" : OK")
-    print("tr2 = "+str(tr3)+" : False")
+    print("tr3 = "+str(tr3)+" : False")
     print("Trans list = "+str(trans.listTrans()))
     print("Read "+str(tr1)+str(trans.readTrans(tr1)))
     print("Read "+str(tr2)+str(trans.readTrans(tr2)))
 
     # pending transaction
-    trans = TransactionsParent(False, "node_3")
+    trans = TransactionsParent(False, "node_3", './node_1')
     tr4 = trans.writeTrans('3.6764f46975c7de06', '3.5541f46975c7de06', '100', '1')
     print("tr4 = "+str(tr4)+" : OK")
     print("Trans list = "+str(trans.listTrans()))

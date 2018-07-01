@@ -14,7 +14,7 @@ if __name__ == '__main__':
     genesis = ''
     mono_memory = False
     mono_disk = False
-    peer = ''
+    peers = []
     miner = ''
     params = sys.argv[1:]
     for i in range(len(params)):
@@ -30,10 +30,11 @@ if __name__ == '__main__':
             mono_disk = True
         elif params[i] == '-peer' and len(params) > i+1:
             i += 1
-            peer = params[i]
+            peers.append(params[i])
         elif params[i] == '-miner' and len(params) > i+1:
             i += 1
             miner = params[i]
+    
     # Vérification
     if mono_memory and mono_disk:
         print('Error: Can\'t use both "-mono-memory" and "-mono-disk"!')
@@ -58,7 +59,7 @@ if __name__ == '__main__':
         shutil.rmtree('./nodes/', ignore_errors=True)
         os.makedirs('./nodes/')
         # Lance un noeud seul sur le disque
-        node = Node('mono-disk')
+        node = Node('mono-disk', './mono', [])
         if not node.initialized:
             node.create()
         # Crée le bloc de départ
@@ -67,8 +68,12 @@ if __name__ == '__main__':
         while True:
             node.mine()
     elif miner != '':
+        # Vérifie qu'un dossier a été donnée pour le noeud
+        if working_dir == '':
+            print('Error: No working directory provided!\nUse "-working-dir" option.')
+            exit(1)
         # Lance un noeud qui va rejoindre le réseau
-        node = Node(miner)
+        node = Node(miner, working_dir, peers)
         if not node.initialized:
             node.create()
         # Crée le bloc de départ
